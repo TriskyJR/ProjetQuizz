@@ -6,7 +6,8 @@
     <h1>Questionnaire C#</h1>
     {% for key, question in questions %}
     <div>
-        Question: {{ key }}
+        <h1>Question: {{ nbrQuestion[key] }}</h1>
+        <p>{{ question.queTitle }}</p>
     </div>
     {% endfor %}
 {% endblock %}

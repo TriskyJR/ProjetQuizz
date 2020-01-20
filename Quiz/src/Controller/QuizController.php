@@ -14,9 +14,14 @@ class QuizController extends AbstractController
     public function index(TQuestionRepository $repo)
     {
         $questions = $repo->findAll();
+        $nbrQuestions = count($questions);
+        for($i=1; $i <= $nbrQuestions; $i++){
+            $nbr[] = $i;
+        }
 
         return $this->render('quiz/index.html.twig', [
             'questions' => $questions,
+            'nbrQuestion' => $nbr
         ]);
     }
 
