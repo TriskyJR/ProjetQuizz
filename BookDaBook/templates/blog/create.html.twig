@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="py-3">
+        {% if editMode %}
+        <h1>Modification de livre</h1>
+        {% else %}
+        <h1>Création de Livre !</h1>
+        {% endif %}
+
+        {{ form_start(formBook) }}
+
+        {{ form_row(formBook.title, {'label': 'Titre','attr': {'placeholder': "Titre du livre"}}) }}
+        {{ form_row(formBook.writer, {'label': 'Auteur','attr': {'placeholder': "Nom et prénom de l'auteur"}}) }}
+        {{ form_row(formBook.category, {'label': 'Catégorie'}) }}
+        {{ form_row(formBook.pageNbr, {'label': 'Nombre de pages','attr': {'placeholder': "Nombre de page du livre"}}) }}
+        {{ form_row(formBook.sample, {'label': 'Extrait de l\'ouvrage','attr': {'placeholder': "Extrait du livre"}}) }}
+        {{ form_row(formBook.resume, {'label': 'Resumé de l\'ouvrage','attr': {'placeholder': "Résumé du livre"}}) }}
+        {{ form_row(formBook.editerName, {'label': 'Nom de l\'éditeur','attr': {'placeholder': "Nom de l'éditeur"}}) }}
+        {{ form_row(formBook.editionYear, {'label': 'Année d\'édition','attr': {'placeholder': "Année d'édition"}}) }}
+        {{ form_row(formBook.image, {'label': 'url de l\'image','attr': {'placeholder': "url de l'image"}}) }}
+
+        <button type="submit" class="btn btn-success">
+        {% if editMode %}
+        Enregistrer les modifications
+        {% else %}
+        Ajouter le livre
+        {% endif %}
+        </button>
+
+        {{ form_end(formBook) }}
+    </div>
+
+{% endblock %}

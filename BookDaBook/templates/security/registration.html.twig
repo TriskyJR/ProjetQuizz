@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="w-50 py-5">
+        <div class="">
+            <h1>Inscription</h1>
+
+            {{ form_start(form) }}
+            
+            {{ form_row(form.username, {'label': 'Nom d\'utilisateur','attr': {'placeholder': 'Antcoke'}}) }}
+            {{ form_row(form.password, {'label': 'Mot de passe','attr': {'placeholder': '********'}}) }}
+            {{ form_row(form.confirm_password, {'label': 'Confirmer le mot de passe','attr': {'placeholder': '********'}}) }}
+
+            <button type="submit" class="btn btn-success">Inscription</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<article class="py-2 text-center">
+    <h2>{{ book.title }}</h2>
+    <h4>Auteur: {{ book.writer }}</h4>
+    <div class="content">
+        <img class="rounded-lg" src="{{ book.image }}" alt="">
+    </div>
+    <div class="content py-2">
+        <p><b>Nom de l'éditeur:</b> {{ book.editerName }}</p>
+        <p><b>Nombre de page:</b> {{ book.pageNbr }}</p>
+        <p><b>Catégorie:</b> {{ book.category.catName }}</p>
+        <div class="metadata"><b>Année d'édition du livre:</b> {{ book.editionYear }}</div>
+    </div>
+    {% if vote %}   
+    <div>
+        {{ form_start(formRate)}}
+        <div class="form-group">
+            <label for="">Note</label>
+            {{ form_widget(formRate.rate)}}
+        </div>
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        {{ form_end(formRate)}}
+    </div>
+    {% endif %}
+        <hr>
+        <h3>Resumé</h3>
+        <p>{{ book.resume }}</p>
+        <h3>Extrait</h3>
+        <p>{{ book.sample }}</p>
+        <p><b>Ajouté par:</b> {{book.user.username}}</p>
+    </div>
+    {% for rate in book.rates %}
+    <div class="text-center">
+        <p>{{ rate.user.username }} a donné la note de {{ rate.rate }} / 5</p>
+    </div>     
+    {% endfor %}
+</article>
+{% endblock %}

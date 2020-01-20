@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row py-4">
+        {% for book in books %}
+        <div class="card col-4 py-2 px-2">
+            <img class="card-img-top" src="{{ book.image }}" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Auteur: {{ book.writer }}</h6>
+                <p class="card-text">Catégorie: {{ book.category.catName }}</p>
+                <p class="card-text">Année d'édition du livre {{ book.editionYear}}</p>
+            </div>
+            {% if app.user %}
+            <div class="text-center">
+                <a href="{{ path('blog_show', {'id': book.id}) }}" class="btn btn-primary">Plus de détail</a>
+                <a href="{{ path('blog_edit', {'id': book.id}) }}" class="btn btn-success">Modifier</a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

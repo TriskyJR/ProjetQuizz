@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css"> {% block stylesheets %}{% endblock %}
+		</head>
+		<body>
+			<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+				<div class="collapse navbar-collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarColor01">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('blog') }}">Liste des Livres</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('blog_create') }}">Ajout d'un livre</a>
+						</li>
+					</ul>
+				</div>
+				<div class="mx-auto order-0">
+					<a class="navbar-brand mx-auto" href="{{ path('home') }}">BookDaBook</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+					<ul class="navbar-nav ml-auto">
+						{% if not app.user %}
+						<li class="nav-item">
+							<a href="{{ path('security_login') }}" class="nav-link">Connexion</a>
+						</li>
+						{% else %}
+						<li class="nav-item">
+							<span class="navbar-brand">{{ app.user.username }}</span>
+						</li>
+						<li class="nav-item">
+							<a href="{{ path('security_logout') }}" class="nav-link">Deconnexion</a>
+						</li>
+						{% endif %}
+					</ul>
+				</div>
+			</nav>
+			<div class="container">
+				{% block body %}{% endblock %}
+			</div>
+			{% block javascripts %}{% endblock %}
+			{% block footer %}
+			<body class="d-flex flex-column">
+				<footer id="sticky-footer" class="py-4 bg-primary text-white-50">
+					<div class=" text-center text-white text-muted">
+						<a href="mailto:contact@bookdabook.ch">contact@bookdabook.ch</a>
+					</div>
+				  <div class="container text-center">
+					<small>Copyright &copy; Filipe Andrade Barros</small>
+				  </div>
+				</footer>
+			</body>
+			{% endblock %}
+		</body>
+	</html>

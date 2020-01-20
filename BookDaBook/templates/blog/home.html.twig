@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1 class="py-2">Bienvenue sur BookDaBook</h1>
+    <h4>Bienvenue à la connaissance !</h4>
+    <p>Ce site est une application web qui a été développé dans le cadre d'un projet des modules 133 et 151. Développé à l'aide du framework Symfony 5 et bootstrap pour le CSS, cette application est une base de connaissance de livres.</p>
+    <h2 class="text-center py-4">Liste des 6 derniers ouvrages ajoutés</h2>
+    <div class="row mb-4">
+        {% for book in books %}
+        <div class="card col-4 py-2 px-2">
+            <img class="card-img-top" src="{{ book.image }}" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Auteur: {{ book.writer }}</h6>
+                <p class="card-text">Catégorie: {{ book.category.catName }}</p>
+                <p class="card-text">Année d'édition du livre {{ book.editionYear}}</p>
+            </div>
+            {% if app.user %}
+            <div class="text-center">
+                <a href="{{ path('blog_show', {'id': book.id}) }}" class="btn btn-primary">Plus de détail</a>
+                <a href="{{ path('blog_edit', {'id': book.id}) }}" class="btn btn-success">Modifier</a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
