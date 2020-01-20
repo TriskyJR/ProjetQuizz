@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200120083109 extends AbstractMigration
+final class Version20200120090854 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,9 @@ final class Version20200120083109 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE tquestion (id INT AUTO_INCREMENT NOT NULL, que_title VARCHAR(255) NOT NULL, que_type TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE tuser_answer ADD answer_id INT NOT NULL');
+        $this->addSql('ALTER TABLE tuser_answer ADD CONSTRAINT FK_88919C10AA334807 FOREIGN KEY (answer_id) REFERENCES tanswer (id)');
+        $this->addSql('CREATE INDEX IDX_88919C10AA334807 ON tuser_answer (answer_id)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +32,8 @@ final class Version20200120083109 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE tquestion');
+        $this->addSql('ALTER TABLE tuser_answer DROP FOREIGN KEY FK_88919C10AA334807');
+        $this->addSql('DROP INDEX IDX_88919C10AA334807 ON tuser_answer');
+        $this->addSql('ALTER TABLE tuser_answer DROP answer_id');
     }
 }
