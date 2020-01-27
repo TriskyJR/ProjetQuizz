@@ -34,4 +34,14 @@ class QuizController extends AbstractController
 
         ]);
     }
+
+    /**
+     * @Route("/login", name="login")
+     *
+     * @return void
+     */
+    public function login()
+    {
+        return $this->render('quiz/login.html.twig');
+    }
 }
