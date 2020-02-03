@@ -21,6 +21,12 @@ class TUserScore
      */
     private $scoScore;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TUser", inversedBy="tUserScore", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +40,18 @@ class TUserScore
     public function setScoScore(float $scoScore): self
     {
         $this->scoScore = $scoScore;
+
+        return $this;
+    }
+
+    public function getUser(): ?TUser
+    {
+        return $this->user;
+    }
+
+    public function setUser(TUser $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -1,13 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuizController!{% endblock %}
+{% block title %}Hello QuizController!
+{% endblock %}
 
 {% block body %}
-    <h1>Questionnaire C#</h1>
-    {% for key, question in questions %}
-    <div>
-        <h1>Question: {{ nbrQuestion[key] }}</h1>
-        <p>{{ question.queTitle }}</p>
+<h1>Questionnaire C#</h1>
+{% for key, question in questions|slice(questionLimitDown,10)%}
+	<div class="card bg-light mb-3 d-flex align-self-center" style="width: 70rem;">
+		<div class="card-header">Question :
+			{{ nbrQuestion[key] }}</div>
+		<div class="card-body">
+			<h3>{{ question.queTitle }}</h3>
+			{% for ans in question.tAnswers %}
+				<input {% if question.queType == 0 %} type="radio" {% else %} type="checkbox" {% endif %} name="answer{{ question.id }}">
+				{{ ans.ansTitle }}
+			</input><br>
+		{% endfor %}
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
+<div class="btn-group" style="display: inline-block;">
+    {#{% if questionLimitDown != 0 %}#}
+        <button type"button" class="btn btn-secondary" style="width: 10rem; float:left;">Précedent</button>
+    {#{% endif %}#}
+    
+    <button type"button" class="btn btn-secondary" style="width: 10rem; float:right;" href="">Suivant</button>
+</div>
+
 {% endblock %}
