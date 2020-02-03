@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Lun 03 Février 2020 à 08:51
+-- Généré le :  Lun 03 Février 2020 à 08:54
 -- Version du serveur :  5.7.11
 -- Version de PHP :  7.0.3
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `db_quiz`
 --
+CREATE DATABASE IF NOT EXISTS `db_quiz` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `db_quiz`;
 
 -- --------------------------------------------------------
 
