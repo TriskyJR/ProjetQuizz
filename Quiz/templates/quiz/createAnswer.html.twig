@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formAnswer 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+<h1>Question: {{ question.quetitle }}</h1>
+<h1>Ajouter une réponse</h1>
+{{ form_start(formAnswer) }}
+
+<div class="form-group">
+    {{ form_row(formAnswer.ansTitle) }}
+</div>
+
+<div class="form-group">
+    {{ form_row(formAnswer.ansTrueFalse) }}
+</div>
+
+<button type="submit" class="btn btn-success">Enregistrer</button>
+{{ form_end(formAnswer) }}
+
+{% endblock %}
