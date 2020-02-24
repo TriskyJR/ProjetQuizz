@@ -4,6 +4,10 @@
 
 {% block body %}
 <h1>Question: {{ question.quetitle }}</h1>
+<h1>Réponse:</h1>
+{% for ans in answers %}
+    <p>{{ ans.ansTitle }}</p>
+{% endfor %}
 <h1>Ajouter une réponse</h1>
 {{ form_start(formAnswer) }}
 

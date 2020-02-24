@@ -52,6 +52,7 @@ class QuizController extends AbstractController
     {
         return $this->render('quiz/login.html.twig');
     }
+
     /**
      * @Route("/new", name="new")
      */
@@ -101,13 +102,14 @@ class QuizController extends AbstractController
     /**
      * @Route("/create", name="createAnswer")
      */
-    public function createAnswer(TAnswer $answer = null, TQuestionRepository $repo ,Request $request, ManagerRegistry $managerRegistry){
+    public function createAnswer(TAnswer $answer = null, TQuestionRepository $repo , TAnswerRepository $ansRepo,Request $request, ManagerRegistry $managerRegistry){
 
         if(!$answer){
             $answer = new TAnswer();
         }
 
         $question = $repo->findOneBy([], ['id' => 'desc']);
+        $answers = $ansRepo->findBy(['question' => $question]);
 
         $formAnswer = $this->createFormBuilder($answer)
                            ->add('ansTitle', TextType::class, [
@@ -131,16 +133,23 @@ class QuizController extends AbstractController
         $formAnswer->handleRequest($request);
 
         if($formAnswer->isSubmitted() && $formAnswer->isValid()){
-            $em = $managerRegistry->getManager();
-            $answer->setQuestion($question);
-            $em->persist($question);
-            $em->flush();
-            return $this->redirectToRoute('createAnswer');
+            if(count($answers)<5){
+                $em = $managerRegistry->getManager();
+                $answer->setQuestion($question);
+                $em->persist($answer);
+                $em->flush();
+                return $this->redirectToRoute('createAnswer');
+            }
+            else{
+                
+                return $this->redirectToRoute('createAnswer');
+            }
         }
 
         return $this->render('quiz/createAnswer.html.twig', [
             'question' => $question,
             'formAnswer' => $formAnswer->createView(),
+            'answers' => $answers,
         ]);
     }
 
