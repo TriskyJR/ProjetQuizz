@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,9 +29,14 @@ class TUser
     private $useClass;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\TUserScore", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\TUserAnswer", mappedBy="user")
      */
-    private $tUserScore;
+    private $tUserAnswers;
+
+    public function __construct()
+    {
+        $this->tUserAnswers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,21 +67,34 @@ class TUser
         return $this;
     }
 
-    public function getTUserScore(): ?TUserScore
+    /**
+     * @return Collection|TUserAnswer[]
+     */
+    public function getTUserAnswers(): Collection
     {
-        return $this->tUserScore;
+        return $this->tUserAnswers;
     }
 
-    public function setTUserScore(TUserScore $tUserScore): self
+    public function addTUserAnswer(TUserAnswer $tUserAnswer): self
     {
-        $this->tUserScore = $tUserScore;
-
-        // set the owning side of the relation if necessary
-        if ($tUserScore->getUser() !== $this) {
-            $tUserScore->setUser($this);
+        if (!$this->tUserAnswers->contains($tUserAnswer)) {
+            $this->tUserAnswers[] = $tUserAnswer;
+            $tUserAnswer->setUser($this);
         }
 
         return $this;
     }
 
+    public function removeTUserAnswer(TUserAnswer $tUserAnswer): self
+    {
+        if ($this->tUserAnswers->contains($tUserAnswer)) {
+            $this->tUserAnswers->removeElement($tUserAnswer);
+            // set the owning side to null (unless already changed)
+            if ($tUserAnswer->getUser() === $this) {
+                $tUserAnswer->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

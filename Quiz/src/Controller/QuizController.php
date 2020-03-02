@@ -2,37 +2,61 @@
 
 namespace App\Controller;
 
-use App\Repository\TAnswerRepository;
-use App\Repository\TQuestionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\Session;
 use App\Entity\TAnswer;
 use App\Entity\TQuestion;
+use App\Entity\TUserAnswer;
+use App\Repository\TAnswerRepository;
+use App\Repository\TQuestionRepository;
+use App\Repository\TUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuizController extends AbstractController
 {
     /**
      * @Route("/quiz", name="quiz")
      */
-    public function index(TQuestionRepository $querepo, TAnswerRepository $ansRepo, Session $session, $questionLimitDown=0)
+    public function index(TQuestionRepository $querepo, TAnswerRepository $answerrepo ,TUserRepository $userrepo,TUserAnswer $userAnswer = null ,Session $session, Request $request, ManagerRegistry $managerRegistry)
     {
+        $user = $userrepo->find(['id' => 1]);
         $questions = $querepo->findAll();
         $nbrQuestions = count($questions);
         for($i=1; $i <= $nbrQuestions; $i++){
             $nbr[] = $i;
         }
+        if(!empty($_POST["answers"])){
+            var_dump($_POST['answers']);
+            $em = $managerRegistry->getManager();
+            foreach($_POST["answers"] as $useAnswer){
+                $userAnswer = new TUserAnswer();
+                $ans = $answerrepo->find(['id' => $useAnswer]);
+                $userAnswer->setAnswer($ans);
+                $userAnswer->setUser($user);
+                $em->persist($userAnswer);
+            }
+            
+            $em->flush(); 
+            return $this->redirectToRoute('quiz');
+        }
+
         return $this->render('quiz/index.html.twig', [
             'questions' => $questions,
             'nbrQuestion' => $nbr,
-            'questionLimitDown' => $questionLimitDown
+        ]);
+
+    }
+    
+    public function SendAnswers(){
+        return $this->render('quiz/weefuhfuehf.html.twig', [
+            
         ]);
     }
-
+    
     /** 
      * @Route("/", name="home")
      */

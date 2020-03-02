@@ -4,27 +4,39 @@
 {% endblock %}
 
 {% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <h1>Questionnaire C#</h1>
-{% for key, question in questions|slice(questionLimitDown,10)%}
+{#{% for key, question in questions|slice(questionLimitDown,10)%}#}
+<form action="{{ path('quiz') }}" method="POST">
+{% for key, question in questions %}
 	<div class="card bg-light mb-3 d-flex align-self-center" style="width: 70rem;">
 		<div class="card-header">Question :
 			{{ nbrQuestion[key] }}</div>
 		<div class="card-body">
 			<h3>{{ question.queTitle }}</h3>
 			{% for ans in question.tAnswers %}
-				<input {% if question.queType == 0 %} type="radio" {% else %} type="checkbox" {% endif %} name="answer{{ question.id }}">
+				<input name="answers[]" {% if question.queType == 0 %} type="radio" {% else %} id="question{{ question.id }}" type="checkbox" {% endif %} value="{{ ans.id }}">
 				{{ ans.ansTitle }}
+				{#name="answer{{ question.id }}"#}
 			</input><br>
 		{% endfor %}
-    </div>
-</div>
-{% endfor %}
-<div class="btn-group" style="display: inline-block;">
-    {#{% if questionLimitDown != 0 %}#}
-        <button type"button" class="btn btn-secondary" style="width: 10rem; float:left;">Précedent</button>
-    {#{% endif %}#}
-    
-    <button type"button" class="btn btn-secondary" style="width: 10rem; float:right;" href="">Suivant</button>
-</div>
+	</div>
+</div>{% endfor %}<div
+class="btn-group" style="display: inline-block;">
+<button type"button" class="btn btn-secondary" style="width: 10rem; float:left;">Précedent</button>
 
+<button type"submit" class="btn btn-secondary" style="width: 10rem; float:right;" >Terminer</button>
+</div>
+</form>
 {% endblock %}
+{#{% block javascripts %}
+<script>
+	function saveAnswers(){
+		var answers = [];
+		$.each($("input[name='answers']:checked"), function(){
+			answers.push($(this))
+
+		});
+	}
+</script>
+{% endblock %}#}
