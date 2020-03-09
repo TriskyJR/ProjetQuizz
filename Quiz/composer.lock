@@ -3665,16 +3665,16 @@
         },
         {
             "name": "symfony/ldap",
-            "version": "v5.0.4",
+            "version": "v5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ldap.git",
-                "reference": "c3f78848cbecd690b81166c4ed14b4ad59ed94bc"
+                "reference": "5584c8536ba106a4a2d7ca463a921f2af5ca2396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ldap/zipball/c3f78848cbecd690b81166c4ed14b4ad59ed94bc",
-                "reference": "c3f78848cbecd690b81166c4ed14b4ad59ed94bc",
+                "url": "https://api.github.com/repos/symfony/ldap/zipball/5584c8536ba106a4a2d7ca463a921f2af5ca2396",
+                "reference": "5584c8536ba106a4a2d7ca463a921f2af5ca2396",
                 "shasum": ""
             },
             "require": {
@@ -3723,7 +3723,7 @@
                 "active directory",
                 "ldap"
             ],
-            "time": "2020-01-04T14:08:26+00:00"
+            "time": "2020-02-24T15:05:31+00:00"
         },
         {
             "name": "symfony/mailer",
