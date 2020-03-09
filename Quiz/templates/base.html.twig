@@ -16,7 +16,7 @@
                 </ul>
             </div>
             <div class="mx-auto order-0">
-                <a class="navbar-brand mx-auto" href="">Quiz</a>
+                <a class="navbar-brand mx-auto" href="{{ path('home')}}">Quiz</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -25,14 +25,14 @@
                 <ul class="navbar-nav ml-auto">
                     {% if not app.user %}
                     <li class="nav-item">
-                        <a href="" class="nav-link">Connexion</a>
+                        <a href="{{ path('login')}}" class="nav-link">Connexion</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <span class="navbar-brand"></span>
+                        <span class="navbar-brand">{{ app.user.username }}</span>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">Deconnexion</a>
+                        <a href="{{ path('app_logout') }}" class="nav-link">Deconnexion</a>
                     </li>
                     {% endif %}
                 </ul>

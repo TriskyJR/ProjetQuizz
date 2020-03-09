@@ -6,6 +6,7 @@
 {% block body %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <h1>Questionnaire C#</h1>
+<h1>{{ userID }}</h1>
 {#{% for key, question in questions|slice(questionLimitDown,10)%}#}
 <form action="{{ path('quiz') }}" method="POST">
 {% for key, question in questions %}
