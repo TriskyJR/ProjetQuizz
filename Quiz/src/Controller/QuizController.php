@@ -115,7 +115,7 @@ class QuizController extends AbstractController
                      ->add('queTitle', TextType::class, [
                          'label' => "Énoncé de la question",
                          'attr' => [
-                             'placeholder' => "La maman d'alex"
+                             'placeholder' => "intitulé de la question"
                          ]
                      ])
                      ->add('queType', ChoiceType::class, [
@@ -149,7 +149,6 @@ class QuizController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="createAnswer")
      * @Route("/answer/question={id_question}", name="answerEdit")
      */
     public function createAnswer(TAnswer $answer = null, TQuestionRepository $repo, TAnswerRepository $ansRepo,Request $request, ManagerRegistry $managerRegistry){
@@ -158,17 +157,24 @@ class QuizController extends AbstractController
             $answer = new TAnswer();
         }
 
+
+        $addMode = true;
+
         $id = $request->attributes->get('id_question');
         $question = $repo->findOneBy(['id' => $id]);
 
 
         $answers = $ansRepo->findBy(['question' => $question]);
 
+        if(count($answers) == 5){
+            $addMode = false;
+        }
+
         $formAnswer = $this->createFormBuilder($answer)
                            ->add('ansTitle', TextType::class, [
                                 'label' => "Réponse",
                                 'attr' => [
-                                    'placeholder' => 'Le CLient'
+                                    'placeholder' => 'oui'
                                 ]
                             ])
                             ->add('ansTrueFalse', ChoiceType::class, [
@@ -185,10 +191,9 @@ class QuizController extends AbstractController
 
         $formAnswer->handleRequest($request);
 
-        $addMode = true;
 
         if($formAnswer->isSubmitted() && $formAnswer->isValid()){
-            if(count($answers)<5){
+            if(count($answers) < 5){
                 $em = $managerRegistry->getManager();
                 $answer->setQuestion($question);
                 $em->persist($answer);
@@ -197,16 +202,16 @@ class QuizController extends AbstractController
             }
             else{
                 $addMode = false;
-                return $this->redirectToRoute('questions');
             }
         }
+
 
         return $this->render('quiz/createAnswer.html.twig', [
             'question' => $question,
             'formAnswer' => $formAnswer->createView(),
             'answers' => $answers,
             'addMode' => $addMode,
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
@@ -246,12 +251,19 @@ class QuizController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $post = $em->getRepository(TAnswer::class)->find($id);
+        $ans = $em->getRepository(TAnswer::class)->find(['id' => $id]);
+        $question = $ans->getQuestion();
+        $idQuestion = $question->getId();
 
-        if(!$post){
-            return $this->redirectToRoute('questions');
+
+        if (!$post) {
+            throw $this->createNotFoundException('No answer found for id '.$id);
         }
+
         $em->remove($post);
         $em->flush();
+
+        return $this->redirectToRoute('answerEdit', array('id_question' => $idQuestion));
     }
 
 

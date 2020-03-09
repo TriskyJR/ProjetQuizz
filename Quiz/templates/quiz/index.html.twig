@@ -16,7 +16,7 @@
 		<div class="card-body">
 			<h3>{{ question.queTitle }}</h3>
 			{% for ans in question.tAnswers %}
-				<input name="answers[]" {% if question.queType == 0 %} type="radio" {% else %} id="question{{ question.id }}" type="checkbox" {% endif %} value="{{ ans.id }}">
+				<input name="answers[]" {% if question.queType == 0 %} type="checkbox" {% else %} id="question{{ question.id }}" type="radio" {% endif %} value="{{ ans.id }}">
 				{{ ans.ansTitle }}
 				{#name="answer{{ question.id }}"#}
 			</input><br>

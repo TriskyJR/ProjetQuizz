@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <h2 class="text-center">Questions</h2>
+<a href="{{ path('new') }}" class="mt-1 mb-1 btn btn-success">Ajouter une question</a>
 {% for key, que in questions %}
 <div class="card">
     <div class="card-header">
