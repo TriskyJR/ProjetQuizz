@@ -1,7 +1,13 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory: { memory: null }
+    providers:       
+        my_ldap:
+            ldap:
+                service: Symfony\Component\Ldap\Ldap
+                base_dn: 'CN=Users,DC=quiz,DC=local'
+                search_dn: 'CN=Administrateur,CN=Users,DC=quiz,DC=local'
+                search_password: .Etml123-
+                default_roles: ROLE_USER         
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -9,6 +15,16 @@ security:
         main:
             anonymous: lazy
 
+            form_login_ldap:
+            #http_basic_ldap:
+                login_path: login
+                check_path: login
+                service: Symfony\Component\Ldap\Ldap
+                dn_string: 'CN={username},CN=Users,DC=quiz,DC=local'
+
+            logout:
+                path: app_logout
+            
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -18,5 +34,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/quiz, roles: ROLE_USER }
