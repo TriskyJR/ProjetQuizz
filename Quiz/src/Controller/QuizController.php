@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\IsNull;
 
 class QuizController extends AbstractController
 {    
@@ -27,38 +28,36 @@ class QuizController extends AbstractController
     public function index(TQuestionRepository $querepo, TAnswerRepository $answerrepo ,TUserRepository $userrepo,TUserAnswer $userAnswer = null ,Session $session, Request $request, ManagerRegistry $managerRegistry)
     {
         $user = $userrepo->find(['id' => $_SESSION['userID']]);
-        $questions = $querepo->findAll();
-        $nbrQuestions = count($questions);
-        for($i=1; $i <= $nbrQuestions; $i++){
-            $nbr[] = $i;
-        }
-        if(!empty($_POST["answers"])){
-            var_dump($_POST['answers']);
-            $em = $managerRegistry->getManager();
-            foreach($_POST["answers"] as $useAnswer){
-                $userAnswer = new TUserAnswer();
-                $ans = $answerrepo->find(['id' => $useAnswer]);
-                $userAnswer->setAnswer($ans);
-                $userAnswer->setUser($user);
-                $em->persist($userAnswer);
+        if($user->getUseAnswered() == 0){
+            $questions = $querepo->findAll();
+            $nbrQuestions = count($questions);
+            for($i=1; $i <= $nbrQuestions; $i++){
+                $nbr[] = $i;
             }
-            
-            $em->flush(); 
-            return $this->redirectToRoute('quiz');
+            if(!empty($_POST["answers"])){
+                var_dump($_POST['answers']);
+                $em = $managerRegistry->getManager();
+                foreach($_POST["answers"] as $useAnswer){
+                    $userAnswer = new TUserAnswer();
+                    $ans = $answerrepo->find(['id' => $useAnswer]);
+                    $userAnswer->setAnswer($ans);
+                    $userAnswer->setUser($user);
+                    $em->persist($userAnswer);
+                }
+                
+                $em->flush(); 
+                return $this->redirectToRoute('quiz');
+            }
+            return $this->render('quiz/index.html.twig', [
+                'questions' => $questions,
+                'nbrQuestion' => $nbr, 
+                'userID' => $_SESSION['userID']          
+            ]);
         }
-
-        return $this->render('quiz/index.html.twig', [
-            'questions' => $questions,
-            'nbrQuestion' => $nbr, 
-            'userID' => $_SESSION['userID']          
-        ]);
-
-    }
-    
-    public function SendAnswers(){
-        return $this->render('quiz/weefuhfuehf.html.twig', [
-            
-        ]);
+        else{
+            $error = "Vous avez déjà répondu au questionnaire";
+            return $this->redirectToRoute('login',array($alreadyAnswered = $error));
+        }
     }
     
     /** 
@@ -205,13 +204,20 @@ class QuizController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request, AuthenticationUtils $authUtils)
+    public function loginAction(Request $request, AuthenticationUtils $authUtils, $alreadyAnswered)
     {       
         // get the login error if there is one
         $error = $authUtils->getLastAuthenticationError();
-         
         // last username entered by the user
         $lastUsername = $authUtils->getLastUsername();
+         if(!empty($alreadyAnswered)){
+            return $this->render('quiz/login.html.twig', array(
+                'last_username' => $lastUsername,
+                'error'         => $error,
+                'alreadyAns' => $alreadyAnswered
+            ));
+         }
+        
                          
         return $this->render('quiz/login.html.twig', array(
             'last_username' => $lastUsername,

@@ -33,6 +33,11 @@ class TUser
      */
     private $tUserAnswers;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $useAnswered;
+
     public function __construct()
     {
         $this->tUserAnswers = new ArrayCollection();
@@ -94,6 +99,18 @@ class TUser
                 $tUserAnswer->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUseAnswered(): ?bool
+    {
+        return $this->useAnswered;
+    }
+
+    public function setUseAnswered(bool $useAnswered): self
+    {
+        $this->useAnswered = $useAnswered;
 
         return $this;
     }

@@ -31,6 +31,7 @@ final class Version20200302183326 extends AbstractMigration
         $this->addSql('ALTER TABLE tuser_answer ADD CONSTRAINT FK_88919C10AA334807 FOREIGN KEY (answer_id) REFERENCES tanswer (id)');
         $this->addSql('ALTER TABLE tuser_answer ADD CONSTRAINT FK_88919C10A76ED395 FOREIGN KEY (user_id) REFERENCES tuser (id)');
         $this->addSql('ALTER TABLE tuser_score ADD CONSTRAINT FK_16AD34E2A76ED395 FOREIGN KEY (user_id) REFERENCES tuser (id)');
+        $this->addSql('ALTER TABLE tuser ADD use_answered TINYINT(1) NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -47,5 +48,6 @@ final class Version20200302183326 extends AbstractMigration
         $this->addSql('DROP TABLE tuser');
         $this->addSql('DROP TABLE tuser_answer');
         $this->addSql('DROP TABLE tuser_score');
+        $this->addSql('ALTER TABLE tuser DROP use_answered');
     }
 }
