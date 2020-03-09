@@ -79,6 +79,7 @@ class QuizController extends AbstractController
 
     /**
      * @Route("/new", name="new")
+     * @Route("/question/{id}/edit", name="questionEdit")
      */
     public function create(TQuestion $question = null,Request $request, ManagerRegistry $managerRegistry)
     {
@@ -113,26 +114,31 @@ class QuizController extends AbstractController
             $em = $managerRegistry->getManager();
             $em->persist($question);
             $em->flush();
-            return $this->redirectToRoute('createAnswer');
+            return $this->redirectToRoute('questions');
         }
 
 
         return $this->render('quiz/createQuestion.html.twig',[
             'formQuestion' => $form->createView(),
+            'editMode' => $question->getId() !== null
 
         ]);
     }
 
     /**
      * @Route("/create", name="createAnswer")
+     * @Route("/answer/question={id_question}", name="answerEdit")
      */
-    public function createAnswer(TAnswer $answer = null, TQuestionRepository $repo , TAnswerRepository $ansRepo,Request $request, ManagerRegistry $managerRegistry){
+    public function createAnswer(TAnswer $answer = null, TQuestionRepository $repo, TAnswerRepository $ansRepo,Request $request, ManagerRegistry $managerRegistry){
 
         if(!$answer){
             $answer = new TAnswer();
         }
 
-        $question = $repo->findOneBy([], ['id' => 'desc']);
+        $id = $request->attributes->get('id_question');
+        $question = $repo->findOneBy(['id' => $id]);
+
+
         $answers = $ansRepo->findBy(['question' => $question]);
 
         $formAnswer = $this->createFormBuilder($answer)
@@ -156,17 +162,19 @@ class QuizController extends AbstractController
 
         $formAnswer->handleRequest($request);
 
+        $addMode = true;
+
         if($formAnswer->isSubmitted() && $formAnswer->isValid()){
             if(count($answers)<5){
                 $em = $managerRegistry->getManager();
                 $answer->setQuestion($question);
                 $em->persist($answer);
                 $em->flush();
-                return $this->redirectToRoute('createAnswer');
+                return $this->redirect($request->getUri());
             }
             else{
-                
-                return $this->redirectToRoute('createAnswer');
+                $addMode = false;
+                return $this->redirectToRoute('questions');
             }
         }
 
@@ -174,7 +182,53 @@ class QuizController extends AbstractController
             'question' => $question,
             'formAnswer' => $formAnswer->createView(),
             'answers' => $answers,
+            'addMode' => $addMode,
+            'id' => $id
         ]);
+    }
+
+    /**
+     * @Route("/adminPanel", name="adminPanel")
+     */
+    public function adminPanel(TQuestionRepository $repo , TAnswerRepository $ansRepo){
+
+
+        return $this->render('quiz/adminPanel.html.twig', [
+
+
+        ]);
+    }
+
+    /**
+     * @Route("/editQuestions", name="questions")
+     */
+    public function questions(TQuestionRepository $repo, TAnswerRepository $ansRepo){
+        $questions = $repo->findAll();
+        $nbrQuestions = count($questions);
+        for($i=1; $i <= $nbrQuestions; $i++){
+            $nbr[] = $i;
+        }
+        
+        return $this->render('quiz/questions.html.twig', [
+            'questions' => $questions,
+            'nbrQuestion' => $nbr,
+
+        ]);
+    }
+    
+    /**
+     * @Route("/delete/{id}", name="delete")
+     */
+    public function deleteAtion($id){
+        $em = $this->getDoctrine()->getManager();
+
+        $post = $em->getRepository(TAnswer::class)->find($id);
+
+        if(!$post){
+            return $this->redirectToRoute('questions');
+        }
+        $em->remove($post);
+        $em->flush();
     }
 
 }

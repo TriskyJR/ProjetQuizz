@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="card">
+    <div class="card-header mb-3">
+      Admin Panel
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-md-0 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Questions</h5>
+                    <p class="card-text">Ajouter ou modifier des questions existantes</p>
+                    <a href="{{ path('questions') }}" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Réponse</h5>
+                    <p class="card-text">Ajouter, supprimer ou modifier une réponse pour une question</p>
+                    <a href="#!" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 text-center mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Résultat par classe</h5>
+                    <p class="card-text">Afficher le résultat des élèves par classe</p>
+                    <a href="#!" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+      </blockquote>
+    </div>
+</div>
+{% endblock %}

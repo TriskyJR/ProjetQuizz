@@ -3,7 +3,11 @@
 {% form_theme formQuestion 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
+{% if editMode %}
+<h1>Modification de la question</h1>
+{% else %}
 <h1>Création d'une question !</h1>
+{% endif %}
 {{ form_start(formQuestion) }}
 
 

@@ -3,23 +3,27 @@
 {% form_theme formAnswer 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-<h1>Question: {{ question.quetitle }}</h1>
-<h1>Réponse:</h1>
+    <h1>Question: {{ question.quetitle }}</h1>
+    <h1>Réponse:</h1>
 {% for ans in answers %}
-    <p>{{ ans.ansTitle }}</p>
+    <p>{{ ans.ansTitle }}</p><a href="{{ path('delete', {'id': ans.id}) }}" class="btn btn-primary w-25">delete</a>
 {% endfor %}
-<h1>Ajouter une réponse</h1>
-{{ form_start(formAnswer) }}
+{% if addMode %}
+    <h1>Ajouter une réponse</h1>
+    {{ form_start(formAnswer) }}
 
-<div class="form-group">
-    {{ form_row(formAnswer.ansTitle) }}
-</div>
+    <div class="form-group">
+        {{ form_row(formAnswer.ansTitle) }}
+    </div>
 
-<div class="form-group">
-    {{ form_row(formAnswer.ansTrueFalse) }}
-</div>
+    <div class="form-group">
+        {{ form_row(formAnswer.ansTrueFalse) }}
+    </div>
 
-<button type="submit" class="btn btn-success">Enregistrer</button>
-{{ form_end(formAnswer) }}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    {{ form_end(formAnswer) }}
+{% else %}
+    <p>Vous avez déjà Ajouté le nombres de réponses max (5) !</p>
+{% endif %}
 
 {% endblock %}

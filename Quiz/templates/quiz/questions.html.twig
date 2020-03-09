@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h2 class="text-center">Questions</h2>
+{% for key, que in questions %}
+<div class="card">
+    <div class="card-header">
+      Question {{ nbrQuestion[key] }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ que.queTitle }}</h5>
+      {% for ans in que.tAnswers %}
+      <p class="card-text">{{ ans.ansTitle }}</p>
+      {% endfor %}
+      <a href="{{ path('questionEdit', {'id': que.id}) }}" class="btn btn-primary">Modifier questions</a>
+      <a href="{{ path('answerEdit', {'id_question': que.id}) }}" class="btn btn-primary">Modifier réponses</a>
+    </div>
+  </div>
+{#
+    <div class="card bg-light mb-3" style="max-width: 20rem;">
+        <div class="card-header">Header</div>
+        <div class="card-body">
+        <h5 class="card-title">Light Panel title</h5>
+        <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p>
+    </div>
+    <div>
+        <p>{{ que.queTitle }}</p>
+        <a href="{{ path('questionEdit', {'id': que.id}) }}" class="btn btn-success w-25 mb-5">Modifier</a>
+    </div>
+#}
+{% endfor %}
+
+{% endblock %}
