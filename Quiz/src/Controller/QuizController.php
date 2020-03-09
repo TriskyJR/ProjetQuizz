@@ -27,6 +27,7 @@ class QuizController extends AbstractController
      */
     public function index(TQuestionRepository $querepo, TAnswerRepository $answerrepo ,TUserRepository $userrepo,TUserAnswer $userAnswer = null ,Session $session, Request $request, ManagerRegistry $managerRegistry)
     {
+        $nbr[] = null;
         $user = $userrepo->find(['id' => $_SESSION['userID']]);
         if($user->getUseAnswered() == 0){
             $questions = $querepo->findAll();
@@ -45,7 +46,8 @@ class QuizController extends AbstractController
                     $em->persist($userAnswer);
                 }
                 
-                $em->flush(); 
+                $em->flush();
+                $user->setUseAnswered(1); 
                 return $this->redirectToRoute('quiz');
             }
             return $this->render('quiz/index.html.twig', [
@@ -71,7 +73,6 @@ class QuizController extends AbstractController
             $dbUser = $repo->findBy(['useUsername' => $user]);  
             if(empty($dbUser)){                  
                 $this->firstLog();
-                $_SESSION['userID'] = $dbUser[0]->getId();
                 return $this->render('quiz/firstLog.html.twig');
             }         
             $_SESSION['userID'] = $dbUser[0]->getId();
@@ -94,6 +95,7 @@ class QuizController extends AbstractController
                 $tUser = new TUser();
                 $tUser->setUseUsername($user);
                 $tUser->setUseClass('FIN2');
+                $tUser->setUseAnswered(0);
                 
                 $entityManager->persist($tUser);
                 
@@ -270,24 +272,17 @@ class QuizController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request, AuthenticationUtils $authUtils, $alreadyAnswered)
+    public function loginAction(Request $request, AuthenticationUtils $authUtils, $alreadyAnswered = null)
     {       
         // get the login error if there is one
         $error = $authUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authUtils->getLastUsername();
-         if(!empty($alreadyAnswered)){
-            return $this->render('quiz/login.html.twig', array(
-                'last_username' => $lastUsername,
-                'error'         => $error,
-                'alreadyAns' => $alreadyAnswered
-            ));
-         }
-        
-                         
+                              
         return $this->render('quiz/login.html.twig', array(
             'last_username' => $lastUsername,
             'error'         => $error,
+            'alreadyAns' => $alreadyAnswered
         ));
     }   
 
