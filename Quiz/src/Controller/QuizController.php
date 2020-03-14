@@ -35,15 +35,18 @@ class QuizController extends AbstractController
             for($i=1; $i <= $nbrQuestions; $i++){
                 $nbr[] = $i;
             }
-            if(!empty($_POST["answers"])){
-                var_dump($_POST['answers']);
+            if(!empty($_POST)){
+                var_dump($_POST);
                 $em = $managerRegistry->getManager();
-                foreach($_POST["answers"] as $useAnswer){
-                    $userAnswer = new TUserAnswer();
-                    $ans = $answerrepo->find(['id' => $useAnswer]);
-                    $userAnswer->setAnswer($ans);
-                    $userAnswer->setUser($user);
-                    $em->persist($userAnswer);
+                foreach($_POST as $useQuestion){
+                    
+                    foreach($useQuestion as $useAnswer){
+                        $userAnswer = new TUserAnswer();
+                        $ans = $answerrepo->find(['id' => $useAnswer]);
+                        $userAnswer->setAnswer($ans);
+                        $userAnswer->setUser($user);
+                        $em->persist($userAnswer);
+                    }
                 }
                 
                 $em->flush();
